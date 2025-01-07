@@ -28,7 +28,8 @@ jobs:
       
       - name: Build with Maven
         run: |
-          mvn clean install -Dmaven.test.skip=true
+          mvn -B -U clean package -Dmaven.test.skip=true
+        # mvn clean install -Dmaven.test.skip=true
           
       - name: Sonatype Lifecycle SCA Scan
         if: always()
