@@ -1,4 +1,4 @@
-name: Sonatype SCA Scanning for Common Domain Model
+name: Sonatype SCA Scanning for CDM
 
 on:
   workflow_dispatch:
@@ -29,6 +29,7 @@ jobs:
           mvn clean install -Dmaven.test.skip=true
           
       - name: Sonatype Lifecycle SCA Scan
+        if: always()
         # if: github.repository_owner == 'finos'
         id: evaluate
         uses: sonatype/actions/evaluate@v1
@@ -40,6 +41,7 @@ jobs:
           stage: "build"
           scan-targets: .
           module-exclude: ${{ env.ExcludeDirectory }}
+          
       - name: Save Sonatype SBOM
         if: steps.evaluate.outputs.scan-id && always() 
         uses: sonatype/actions/fetch-sbom@v1
@@ -53,4 +55,3 @@ jobs:
           sbom-version: 2.3
           artifact-name: ${{ env.SonatypeAppId }}-sonatype-bom
           
-        
